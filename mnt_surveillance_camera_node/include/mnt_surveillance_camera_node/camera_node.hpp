@@ -11,15 +11,16 @@ namespace mnt_surveillance
         class CameraNode : public rclcpp::Node
         {
         public:
-            CameraNode() : Node("camera_node")
-            {
-                // Constructor logic here
-            }
+            CameraNode();
 
         private:
-            std::vector<Camera> cameras_;
-
             void add_cameras();
+            void run();
+            void publish_video_streams();
+
+            std::vector<Camera> cameras_;
+            rclcpp::Node::SharedPtr node_handle_;
+            rclcpp::TimerBase::SharedPtr publish_timer_;
 
             // Other member functions here
         };
