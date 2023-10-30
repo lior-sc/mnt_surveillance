@@ -32,6 +32,7 @@ include_directories(
   )
 
 add_library(${PROJECT_NAME}_lib
+  src/camera_node.cpp
   src/cameras/camera.cpp
   src/cameras/webcam.cpp
 )
