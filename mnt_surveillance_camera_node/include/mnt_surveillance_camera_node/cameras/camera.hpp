@@ -13,32 +13,39 @@ using namespace std::chrono_literals;
 
 namespace mnt_surveillance
 {
-    namespace camera
+    namespace camera_node
     {
-        class Camera
+        namespace camera
         {
-        public:
-            explicit Camera(std::shared_ptr<rclcpp::Node> &nh, const std::string &frame_id);
-            virtual ~Camera() {}
+            class Camera
+            {
+            public:
+                explicit Camera(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name_);
+                virtual ~Camera() {}
 
-            virtual bool open() = 0;
-            virtual bool close() = 0;
-            virtual bool capture() = 0;
+                virtual bool open() = 0;
+                virtual bool close() = 0;
+                virtual bool capture() = 0;
+                virtual void process_image();
+                virtual void publish();
 
-        protected:
-            void img_pub_callback();
+            protected:
+                void img_pub_callback();
 
-            // ros variables
-            std::shared_ptr<rclcpp::Node> nh_;
-            std::string frame_id_;
-            rclcpp::QoS qos_ = rclcpp::QoS(rclcpp::KeepLast(10));
-            rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr img_pub_;
-            sensor_msgs::msg::Image::SharedPtr msg_;
-            rclcpp::TimerBase::SharedPtr img_pub_timer_;
+                // ros variables
+                std::shared_ptr<rclcpp::Node> nh_;
+                std::string frame_id_;
+                std::string topic_name_;
+                rclcpp::QoS qos_ = rclcpp::QoS(rclcpp::KeepLast(10));
+                rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr img_pub_;
+                sensor_msgs::msg::Image::SharedPtr msg_;
+                rclcpp::TimerBase::SharedPtr img_pub_timer_;
 
-            // openCV variables
-            cv::Mat img_;
-        };
+                // openCV variables
+                cv::Mat img_;
+            };
+
+        }
 
     } // namespace camera
 } // namespace mnt_surveillance

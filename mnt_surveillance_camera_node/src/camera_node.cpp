@@ -1,7 +1,6 @@
 #include "mnt_surveillance_camera_node/camera_node.hpp"
 #include "mnt_surveillance_camera_node/cameras/webcam.hpp"
 
-using mnt_surveillance::camera::Webcam;
 using mnt_surveillance::camera_node::CameraNode;
 
 CameraNode::CameraNode() : Node("camera_node")
@@ -16,7 +15,7 @@ CameraNode::CameraNode() : Node("camera_node")
 void CameraNode::add_cameras()
 {
     // change this to accept from yaml configuration file
-    cameras_.push_back(Webcam(node_handle_, "webcam_1"));
+    // cameras_.push_back(Webcam(node_handle_, "webcam_1"));
 }
 
 void CameraNode::run()
@@ -28,10 +27,10 @@ void CameraNode::run()
 
 void CameraNode::publish_video_streams()
 {
-    for (auto &camera : cameras_)
-    {
-        camera.publish();
-    }
+    // for (auto &camera : cameras_)
+    // {
+    //     camera.publish();
+    // }
 }
 
 // CameraNode::CameraNode()

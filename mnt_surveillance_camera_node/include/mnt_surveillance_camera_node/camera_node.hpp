@@ -1,13 +1,12 @@
 #include <vector>
 #include <rclcpp/rclcpp.hpp>
 #include "mnt_surveillance_camera_node/cameras/camera.hpp"
+#include "mnt_surveillance_camera_node/cameras/webcam.hpp"
 
 namespace mnt_surveillance
 {
     namespace camera_node
     {
-        using mnt_surveillance::camera::Camera;
-
         class CameraNode : public rclcpp::Node
         {
         public:
@@ -17,10 +16,9 @@ namespace mnt_surveillance
             void add_cameras();
             void run();
             void publish_video_streams();
-
-            std::vector<Camera> cameras_;
             rclcpp::Node::SharedPtr node_handle_;
             rclcpp::TimerBase::SharedPtr publish_timer_;
+            // camera::Webcam web1();
 
             // Other member functions here
         };

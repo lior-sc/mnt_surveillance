@@ -1,21 +1,20 @@
 #include "mnt_surveillance_camera_node/cameras/camera.hpp"
 
-using mnt_surveillance::camera::Camera;
+using mnt_surveillance::camera_node::camera::Camera;
 
-Camera::Camera(std::shared_ptr<rclcpp::Node> &nh, const std::string &frame_id = "")
+Camera::Camera(std::shared_ptr<rclcpp::Node> &nh,
+               const std::string &topic_name = "")
     : nh_(nh),
-      frame_id_(frame_id)
+      topic_name_(topic_name)
 {
-  img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>("img_topic_1", 10);
-  img_pub_timer_ = nh->create_wall_timer(33ms, std::bind(&Camera::img_pub_callback, this));
+  RCLCPP_INFO(nh_->get_logger(), "Init Camera object");
+
+  img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name_, 10);
 }
 
-void Camera::img_pub_callback()
+void Camera::publish()
 {
-  cv::Mat my_img(cv::Size(640, 480), CV_8UC3);
-  cv::randu(my_img, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255));
-  msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", my_img).toImageMsg();
+  capture();
   img_pub_->publish(*msg_.get());
-
-  RCLCPP_INFO(nh_->get_logger(), "image published");
+  RCLCPP_INFO(nh_->get_logger(), "Image published");
 }
