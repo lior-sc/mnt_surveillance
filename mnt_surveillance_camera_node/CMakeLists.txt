@@ -36,6 +36,7 @@ add_library(${PROJECT_NAME}_lib
   src/cameras/camera.cpp
   src/cameras/webcam.cpp
   src/cameras/random_noise.cpp
+  src/cameras/mp4_video.cpp
 )
 
 set(DEPENDENCIES
