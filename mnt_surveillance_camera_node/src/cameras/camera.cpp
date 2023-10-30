@@ -16,7 +16,7 @@ void Camera::publish()
 {
   capture();
   img_pub_->publish(*msg_.get());
-  RCLCPP_INFO(nh_->get_logger(), "Image published");
+  // RCLCPP_INFO(nh_->get_logger(), "Image published");
 }
 
 cv::Mat Camera::process_image(cv::Mat img)
