@@ -6,7 +6,6 @@ CameraNode::CameraNode() : Node("camera_node")
 {
     RCLCPP_INFO(this->get_logger(), "Init surveillance camera node");
     node_handle_ = std::shared_ptr<::rclcpp::Node>(this, [](::rclcpp::Node *) {});
-    RCLCPP_INFO(this->get_logger(), "are we there yet?");
     add_cameras();
     run();
 }
@@ -16,10 +15,10 @@ void CameraNode::add_cameras()
     // change this to accept from yaml configuration file
     cameras_.push_back(new camera::Webcam(
         node_handle_,
-        "hellllllllllo"));
+        "hello1"));
     cameras_.push_back(new camera::RandomNoise(
         node_handle_,
-        "helo2"));
+        "hello2"));
 }
 
 void CameraNode::run()

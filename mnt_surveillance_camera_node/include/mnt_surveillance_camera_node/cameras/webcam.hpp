@@ -19,9 +19,11 @@ namespace mnt_surveillance
                 bool capture() override;
                 bool open() override;
                 bool close() override;
+                cv::Mat process_image(cv::Mat) override;
 
             private:
                 rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr webcam_pub_;
+                std::unique_ptr<cv::VideoCapture> cap;
             };
 
         }
