@@ -6,8 +6,8 @@ using mnt_surveillance::camera_node::CameraNode;
 CameraNode::CameraNode() : Node("camera_node")
 {
     RCLCPP_INFO(this->get_logger(), "Init surveillance camera node");
-    node_handle_ = shared_from_this();
-
+    node_handle_ = std::shared_ptr<::rclcpp::Node>(this, [](::rclcpp::Node *) {});
+    RCLCPP_INFO(this->get_logger(), "are we there yet?");
     add_cameras();
     run();
 }
@@ -15,7 +15,9 @@ CameraNode::CameraNode() : Node("camera_node")
 void CameraNode::add_cameras()
 {
     // change this to accept from yaml configuration file
-    // cameras_.push_back(Webcam(node_handle_, "webcam_1"));
+    cameras_.push_back(new camera::Webcam(
+        node_handle_,
+        "hellllllllllo"));
 }
 
 void CameraNode::run()
@@ -27,10 +29,11 @@ void CameraNode::run()
 
 void CameraNode::publish_video_streams()
 {
-    // for (auto &camera : cameras_)
-    // {
-    //     camera.publish();
-    // }
+    // RCLCPP_INFO(this->get_logger(), "he;;;;llllooooo!");
+    for (const auto &camera : cameras_)
+    {
+        camera->publish();
+    }
 }
 
 // CameraNode::CameraNode()

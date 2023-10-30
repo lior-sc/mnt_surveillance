@@ -18,3 +18,8 @@ void Camera::publish()
   img_pub_->publish(*msg_.get());
   RCLCPP_INFO(nh_->get_logger(), "Image published");
 }
+
+void Camera::process_image()
+{
+  // please god/1!
+}

@@ -18,7 +18,7 @@ namespace mnt_surveillance
             void publish_video_streams();
             rclcpp::Node::SharedPtr node_handle_;
             rclcpp::TimerBase::SharedPtr publish_timer_;
-            // camera::Webcam web1();
+            std::list<camera::Camera *> cameras_;
 
             // Other member functions here
         };

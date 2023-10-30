@@ -7,6 +7,7 @@ Webcam::Webcam(
     const std::string &webcam_topic_name)
     : Camera(nh, webcam_topic_name)
 {
+    RCLCPP_INFO(nh_->get_logger(), "Succeeded to create imu publisher");
     // hello
 }
 

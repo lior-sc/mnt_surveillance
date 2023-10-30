@@ -50,7 +50,7 @@ target_link_libraries(${PROJECT_NAME}_lib)                      # link libraries
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})  # link ros libraries to target
 
 # create executable and link libraries and ament packages
-set(EXECUTABLE_NAME "camera_node")
+set(EXECUTABLE_NAME camera_node)
 add_executable(${EXECUTABLE_NAME} src/node_main.cpp)
 target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME}_lib)
 ament_target_dependencies(${EXECUTABLE_NAME} ${DEPENDENCIES})
