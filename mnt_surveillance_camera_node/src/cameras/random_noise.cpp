@@ -13,9 +13,11 @@ RandomNoise::RandomNoise(
 
 bool RandomNoise::capture()
 {
-    cv::Mat my_img(cv::Size(9, 9), CV_8UC3);
+    cv::Mat my_img(cv::Size(640, 480), CV_16UC3);
     cv::randu(my_img, cv::Scalar(0, 0, 0), cv::Scalar(255, 255, 255));
-    msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", my_img).toImageMsg();
+    cv::Mat proc_img = this->process_image(my_img);
+
+    msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "mono16", proc_img).toImageMsg();
 
     return true;
 }
