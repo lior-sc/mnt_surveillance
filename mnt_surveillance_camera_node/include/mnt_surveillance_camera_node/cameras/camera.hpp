@@ -26,7 +26,7 @@ namespace mnt_surveillance
                 virtual bool open() = 0;
                 virtual bool close() = 0;
                 virtual bool capture() = 0;
-                virtual void process_image();
+                virtual cv::Mat process_image(cv::Mat);
                 virtual void publish();
 
             protected:
