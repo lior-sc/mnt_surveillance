@@ -1,7 +1,6 @@
-#include <vector>
 #include <rclcpp/rclcpp.hpp>
-#include "mnt_surveillance_camera_node/cameras/camera.hpp"
 #include "mnt_surveillance_camera_node/cameras/webcam.hpp"
+#include "mnt_surveillance_camera_node/cameras/random_noise.hpp"
 
 namespace mnt_surveillance
 {
