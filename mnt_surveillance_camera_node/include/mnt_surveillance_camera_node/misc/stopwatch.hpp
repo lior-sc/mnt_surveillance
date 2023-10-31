@@ -1,7 +1,6 @@
 #ifndef STOPWATCH_HPP
 #define STOPWATCH_HPP
 
-#include <chrono>
 #include <rclcpp/rclcpp.hpp>
 
 namespace mnt_surveillance
