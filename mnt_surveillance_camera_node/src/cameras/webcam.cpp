@@ -16,8 +16,11 @@ Webcam::Webcam(
 bool Webcam::capture()
 {
     cv::Mat frame;
+    {
+        StopWatch tmr(nh_);
+        cap->read(frame);
+    }
 
-    cap->read(frame);
     cv::Mat proc_frame = this->process_image(frame);
 
     // msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", frame).toImageMsg();
@@ -30,18 +33,19 @@ bool Webcam::open()
 {
     RCLCPP_INFO(nh_->get_logger(), "opening camera");
     cap = std::make_unique<cv::VideoCapture>(0);
+
     std::this_thread::sleep_for(std::chrono::seconds(1)); // add this line
 
     if (!cap->isOpened())
     {
         RCLCPP_ERROR(nh_->get_logger(), "failed to open teh webcam. change camera port number");
+        this->close();
+        return false;
     }
-    else
-    {
-        RCLCPP_INFO(nh_->get_logger(), "camera works!");
-        RCLCPP_INFO(nh_->get_logger(), "Succeeded to create webcam publisher");
-    }
-    // do nothing
+
+    RCLCPP_INFO(nh_->get_logger(), "camera works!");
+    RCLCPP_INFO(nh_->get_logger(), "Succeeded to create webcam publisher");
+
     return true;
 }
 
@@ -63,9 +67,11 @@ cv::Mat Webcam::process_image(cv::Mat img)
     int y = center_y - crop_size / 2;
 
     cv::Rect rect(x, y, crop_size, crop_size);
-    std::string str = std::to_string(crop_size);
-    RCLCPP_INFO(nh_->get_logger(), "%s", str.c_str());
     cv::Mat cropped_img = img(rect);
+
+    // // print img rectangle size
+    // std::string str = std::to_string(crop_size);
+    // RCLCPP_INFO(nh_->get_logger(), "%s", str.c_str());
 
     // resize image
     cv::Mat resized_img;
