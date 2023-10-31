@@ -14,7 +14,7 @@ namespace mnt_surveillance
             public:
                 explicit Webcam(
                     std::shared_ptr<rclcpp::Node> &nh,
-                    const std::string &topic_name = "webcam");
+                    const std::string &topic_name = "/video/Image");
 
                 bool capture() override;
                 bool open() override;

@@ -20,7 +20,8 @@ namespace mnt_surveillance
             class Camera
             {
             public:
-                explicit Camera(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name_);
+                explicit Camera(std::shared_ptr<rclcpp::Node> &nh,
+                                const std::string &topic_name_);
                 virtual ~Camera() = default;
 
                 virtual bool open() = 0;
