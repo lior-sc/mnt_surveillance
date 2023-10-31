@@ -17,6 +17,17 @@ void Alarm::alarm_service_callback(const example_interfaces::srv::AddTwoInts::Re
                                    example_interfaces::srv::AddTwoInts::Response::SharedPtr response)
 {
     RCLCPP_WARN(nh_->get_logger(), "Service called!!");
+
+    int status = system("ros2 run rqt_console rqt_console");
+
+    if (status == 0)
+    {
+        // Successfully launched rqt_console
+    }
+    else
+    {
+        // Error launching rqt_console
+    }
+
     response->sum = request->a + request->b;
-    // do nothing
 }
