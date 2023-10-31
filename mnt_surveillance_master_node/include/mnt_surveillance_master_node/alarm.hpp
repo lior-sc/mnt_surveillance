@@ -27,7 +27,6 @@ namespace mnt_surveillance
                                             example_interfaces::srv::AddTwoInts::Response::SharedPtr response);
 
                 std::shared_ptr<rclcpp::Node> nh_;
-                rclcpp::QoS qos_ = rclcpp::QoS(rclcpp::KeepLast(10));
                 rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr server_;
             };
         } // namespace alarm
