@@ -3,6 +3,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include "mnt_surveillance_master_node/analyzers/analyzer.hpp"
+#include "mnt_surveillance_master_node/alarm.hpp"
 
 namespace mnt_surveillance
 {
@@ -21,6 +22,7 @@ namespace mnt_surveillance
             void run();
             rclcpp::Node::SharedPtr node_handle_;
             rclcpp::TimerBase::SharedPtr publish_timer_;
+            std::shared_ptr<alarm::Alarm> alarm_service_server_;
 
             // Other member functions here
         };
