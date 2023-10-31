@@ -44,7 +44,9 @@ namespace mnt_surveillance
             class Analyzer
             {
             public:
-                explicit Analyzer(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name);
+                explicit Analyzer(std::shared_ptr<rclcpp::Node> &nh,
+                                  const std::string &img_topic_name,
+                                  const std::string &alarm_service_name);
                 virtual ~Analyzer() = default;
                 void check_alarm_conditions();
 

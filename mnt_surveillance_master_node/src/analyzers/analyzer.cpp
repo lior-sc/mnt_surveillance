@@ -3,12 +3,15 @@
 using mnt_surveillance::master_node::analyzer::Analyzer;
 using std::placeholders::_1;
 
-Analyzer::Analyzer(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name) : nh_(nh)
+Analyzer::Analyzer(std::shared_ptr<rclcpp::Node> &nh,
+                   const std::string &img_topic_name,
+                   const std::string &alarm_service_name)
+    : nh_(nh)
 {
     // img_subscription_ = nh_->create_subscription<sensor_msgs::msg::Image>(
     //     topic_name, qos_, std::bind(&Analyzer::img_sub_callback, this, _1));
-    create_img_subscriber(topic_name);
-    create_alarm_service_client("/mnt_alarm");
+    create_img_subscriber(img_topic_name);
+    create_alarm_service_client(alarm_service_name);
 }
 
 void Analyzer::create_img_subscriber(const std::string &topic_name)
@@ -19,6 +22,7 @@ void Analyzer::create_img_subscriber(const std::string &topic_name)
 
 void Analyzer::img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
+    // get image
     cv_bridge::CvImagePtr cv_ptr;
     try
     {
@@ -32,6 +36,9 @@ void Analyzer::img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg)
 
     // store frame in global variable
     frame_ = cv_ptr->image;
+
+    // check if alarm has to be set
+    check_alarm_conditions();
 }
 
 double Analyzer::get_saturated_pixels_ratio(cv::Mat frame, double threshold_value, double max_value)

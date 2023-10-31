@@ -16,13 +16,15 @@ namespace mnt_surveillance
             ~MasterNode() = default;
 
         private:
-            void add_analyzers();
+            void add_analyzers(const std::string &img_topic_name,
+                               const std::string &alarm_service_name);
             void add_recorders();
-            void add_alarms();
+            void add_alarms(const std::string &alarm_service_name);
             void run();
             rclcpp::Node::SharedPtr node_handle_;
             rclcpp::TimerBase::SharedPtr publish_timer_;
             std::shared_ptr<alarm::Alarm> alarm_service_server_;
+            std::shared_ptr<analyzer::Analyzer> analyzer_object_;
 
             // Other member functions here
         };
