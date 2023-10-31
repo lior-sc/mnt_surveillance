@@ -16,10 +16,6 @@ namespace mnt_surveillance
 
         private:
             std::shared_ptr<rclcpp::Node> nh_;
-            std::chrono::time_point<std::chrono::high_resolution_clock> start_time_;
-            std::chrono::time_point<std::chrono::high_resolution_clock> end_time_;
-            bool running_;
-            double elapsed_time() const;
             rclcpp::Time start_time_;
         };
     }

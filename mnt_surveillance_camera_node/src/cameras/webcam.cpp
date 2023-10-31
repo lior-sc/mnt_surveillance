@@ -1,5 +1,7 @@
 #include "mnt_surveillance_camera_node/cameras/webcam.hpp"
+#include "mnt_surveillance_camera_node/misc/stopwatch.hpp"
 
+using mnt_surveillance::camera_noda::StopWatch;
 using mnt_surveillance::camera_node::camera::Webcam;
 
 Webcam::Webcam(
@@ -14,8 +16,8 @@ Webcam::Webcam(
 bool Webcam::capture()
 {
     cv::Mat frame;
-    cap->read(frame);
 
+    cap->read(frame);
     cv::Mat proc_frame = this->process_image(frame);
 
     // msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", frame).toImageMsg();
