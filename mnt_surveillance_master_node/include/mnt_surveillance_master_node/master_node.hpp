@@ -2,7 +2,7 @@
 #define MASTER__NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
-#include "mnt_surveillance_master_node/analyzer.hpp"
+#include "mnt_surveillance_master_node/analyzers/analyzer.hpp"
 
 namespace mnt_surveillance
 {

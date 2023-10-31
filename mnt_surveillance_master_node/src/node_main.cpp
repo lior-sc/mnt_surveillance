@@ -1,6 +1,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <rcutils/cmdline_parser.h>
-#include "mnt_surveillance_master_node/master_node.hpp";
+#include "mnt_surveillance_master_node/master_node.hpp"
 
 using mnt_surveillance::master_node::MasterNode;
 
