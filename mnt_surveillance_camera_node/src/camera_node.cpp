@@ -5,7 +5,8 @@ using mnt_surveillance::camera_node::CameraNode;
 CameraNode::CameraNode() : Node("camera_node")
 {
     RCLCPP_INFO(this->get_logger(), "Init surveillance camera node");
-    node_handle_ = std::shared_ptr<::rclcpp::Node>(this, [](::rclcpp::Node *) {});
+    // get current node handle
+    node_handle_ = rclcpp::Node::SharedPtr(this);
     add_cameras();
     run();
 }
