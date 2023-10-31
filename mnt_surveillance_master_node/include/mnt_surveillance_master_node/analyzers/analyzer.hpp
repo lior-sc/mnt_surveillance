@@ -27,7 +27,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include <std_msgs/msg/header.hpp>
+#include <example_interfaces/srv/add_two_ints.hpp>
 #include <chrono>
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.hpp>
@@ -44,27 +44,29 @@ namespace mnt_surveillance
             class Analyzer
             {
             public:
-                explicit Analyzer(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name_);
+                explicit Analyzer(std::shared_ptr<rclcpp::Node> &nh, const std::string &topic_name);
                 virtual ~Analyzer() = default;
-
-                virtual cv::Mat get_image() = 0;
-                virtual void analyze_image(cv::Mat);
-                virtual void publish();
+                void check_alarm_conditions();
 
             protected:
-                void img_pub_callback();
+                virtual void img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg);
+                virtual void create_img_subscriber(const std::string &topic_name);
+                virtual void create_alarm_service_client(const std::string &service_name);
+                double get_saturated_pixels_ratio(cv::Mat frame, double threshold_value, double max_value);
+                double get_dark_pixels_ratio(cv::Mat frame, double threshold_value, double in_value);
 
                 // ros variables
                 std::shared_ptr<rclcpp::Node> nh_;
-                std::string frame_id_;
-                std::string topic_name_;
                 rclcpp::QoS qos_ = rclcpp::QoS(rclcpp::KeepLast(10));
-                rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr img_pub_;
+                rclcpp::Subscription<sensor_msgs::msg::Image>::SharedPtr img_subscription_;
                 sensor_msgs::msg::Image::SharedPtr msg_;
-                rclcpp::TimerBase::SharedPtr img_pub_timer_;
 
                 // openCV variables
-                cv::Mat img_;
+                cv::Mat frame_;
+
+                // service variables
+                rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr alarm_client_;
+                example_interfaces::srv::AddTwoInts::Request::SharedPtr alarm_request_;
             };
 
         }
