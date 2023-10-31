@@ -19,7 +19,6 @@ int main(int argc, char *argv[])
     auto camera1_node = std::make_shared<CameraNode>();
 
     executor.add_node(camera1_node);
-
     executor.spin();
 
     rclcpp::shutdown();
