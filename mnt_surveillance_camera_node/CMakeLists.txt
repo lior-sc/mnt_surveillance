@@ -38,6 +38,7 @@ add_library(${PROJECT_NAME}_lib
   src/cameras/random_noise.cpp
   src/cameras/mp4_video.cpp
   src/misc/stopwatch.cpp
+  src/codecs/codec_v1.cpp
 )
 
 set(DEPENDENCIES

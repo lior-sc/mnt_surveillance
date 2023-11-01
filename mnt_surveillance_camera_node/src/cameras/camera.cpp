@@ -1,4 +1,5 @@
 #include "mnt_surveillance_camera_node/cameras/camera.hpp"
+#include "mnt_surveillance_camera_node/codecs/codec_v1.hpp"
 
 using mnt_surveillance::camera_node::camera::Camera;
 
