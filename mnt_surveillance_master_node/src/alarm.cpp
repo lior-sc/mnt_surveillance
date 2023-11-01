@@ -6,28 +6,31 @@ using std::placeholders::_2;
 
 Alarm::Alarm(std::shared_ptr<rclcpp::Node> &nh, const std::string &service_name) : nh_(nh)
 {
-    server_ = nh_->create_service<example_interfaces::srv::AddTwoInts>(
+    alarm_server_ = nh_->create_service<std_srvs::srv::Trigger>(
         service_name,
         std::bind(&Alarm::alarm_service_callback, this, _1, _2));
 
     RCLCPP_INFO(nh_->get_logger(), "Service server created!");
 }
 
-void Alarm::alarm_service_callback(const example_interfaces::srv::AddTwoInts::Request::SharedPtr request,
-                                   example_interfaces::srv::AddTwoInts::Response::SharedPtr response)
+void Alarm::alarm_service_callback(const std_srvs::srv::Trigger::Request::SharedPtr request,
+                                   std_srvs::srv::Trigger::Response::SharedPtr response)
 {
-    RCLCPP_WARN(nh_->get_logger(), "Service called!!");
+    (void) request;
+    RCLCPP_WARN(nh_->get_logger(), "Alarm service called!!!");
 
     int status = system("ros2 run rqt_console rqt_console");
 
-    if (status == 0)
+    if (status != 0)
     {
-        // Successfully launched rqt_console
+        response->success = false;
+        response->message = "Error launching rqt_console";
+        RCLCPP_ERROR(nh_->get_logger(), response->message.c_str());
+        return;
     }
-    else
-    {
-        // Error launching rqt_console
-    }
-
-    response->sum = request->a + request->b;
+    
+    response->success = true;
+    response->message = "rqt_console launched successfully";
+    RCLCPP_INFO(nh_->get_logger(), response->message.c_str());
+    return;
 }

@@ -27,8 +27,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
-#include <example_interfaces/srv/add_two_ints.hpp>
-#include <chrono>
+#include <std_srvs/srv/trigger.hpp>
 #include <cv_bridge/cv_bridge.h>
 #include <image_transport/image_transport.hpp>
 #include <opencv2/opencv.hpp>
@@ -67,8 +66,8 @@ namespace mnt_surveillance
                 cv::Mat frame_;
 
                 // service variables
-                rclcpp::Client<example_interfaces::srv::AddTwoInts>::SharedPtr alarm_client_;
-                example_interfaces::srv::AddTwoInts::Request::SharedPtr alarm_request_;
+                rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr alarm_client_;
+                std_srvs::srv::Trigger::Request::SharedPtr alarm_request_;
             };
 
         }

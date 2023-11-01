@@ -78,8 +78,6 @@ void Analyzer::check_alarm_conditions()
 
     if (saturation_ratio > saturation_thresh)
     {
-        alarm_request_->a = 2;
-        alarm_request_->b = 3;
         alarm_client_->async_send_request(alarm_request_);
     }
 
@@ -91,14 +89,12 @@ void Analyzer::check_alarm_conditions()
      */
     if (darkness_ratio > darkness_thresh)
     {
-        alarm_request_->a = 4;
-        alarm_request_->b = 5;
         alarm_client_->async_send_request(alarm_request_);
     }
 }
 
 void Analyzer::create_alarm_service_client(const std::string &service_name)
 {
-    alarm_client_ = nh_->create_client<example_interfaces::srv::AddTwoInts>(service_name);
-    alarm_request_ = std::make_shared<example_interfaces::srv::AddTwoInts::Request>();
+    alarm_client_ = nh_->create_client<std_srvs::srv::Trigger>(service_name);
+    alarm_request_ = std::make_shared<std_srvs::srv::Trigger::Request>();
 }

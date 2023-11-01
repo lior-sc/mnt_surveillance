@@ -7,7 +7,7 @@
 #define MNT__SURVEILLANCE__ALARM_HPP
 
 #include <rclcpp/rclcpp.hpp>
-#include <example_interfaces/srv/add_two_ints.hpp>
+#include <std_srvs/srv/trigger.hpp>
 
 namespace mnt_surveillance
 {
@@ -23,11 +23,11 @@ namespace mnt_surveillance
                 ~Alarm() = default;
 
             private:
-                void alarm_service_callback(const example_interfaces::srv::AddTwoInts::Request::SharedPtr request,
-                                            example_interfaces::srv::AddTwoInts::Response::SharedPtr response);
+                void alarm_service_callback(const std_srvs::srv::Trigger::Request::SharedPtr request,
+                                            std_srvs::srv::Trigger::Response::SharedPtr response);
 
                 std::shared_ptr<rclcpp::Node> nh_;
-                rclcpp::Service<example_interfaces::srv::AddTwoInts>::SharedPtr server_;
+                rclcpp::Service<std_srvs::srv::Trigger>::SharedPtr alarm_server_;
             };
         } // namespace alarm
     }     // namespace master_node
