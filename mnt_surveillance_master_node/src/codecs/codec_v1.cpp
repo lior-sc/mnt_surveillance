@@ -141,17 +141,3 @@ sensor_msgs::msg::Image CodecV1::decode_to_ros_image(std::vector<uint8_t> input_
     
     return ros_image;
 }
-
-std::vector<uint16_t> CodecV1::get_pixel_vector(cv::Mat input_frame)
-{
-    std::vector<uint16_t> pixel_vector;
-    
-    for(int i=0; i<input_frame.rows; i++)
-    {
-        for(int j=0;j<input_frame.cols;j++)
-        {
-            pixel_vector.push_back(input_frame.at<uint16_t>(i,j));
-        }
-    }
-    return pixel_vector;
-}

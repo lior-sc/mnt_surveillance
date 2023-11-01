@@ -4,7 +4,6 @@
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/image.hpp>
 #include <std_msgs/msg/u_int8_multi_array.hpp>
-#include <opencv2/opencv.hpp>
 
 namespace mnt_surveillance
 {
@@ -27,7 +26,6 @@ namespace mnt_surveillance
                 std::vector<uint8_t> msg_to_uint8_vector(std_msgs::msg::UInt8MultiArray input_msg);
                 sensor_msgs::msg::Image uint16_vector_to_ros_image(std::vector<uint16_t> input_data);
                 sensor_msgs::msg::Image decode_to_ros_image(std::vector<uint8_t> input_data);
-                std::vector<uint16_t> get_pixel_vector(cv::Mat input_frame);
 
                 private:
                 int frame_width_px_;

@@ -2,7 +2,7 @@
 
 ## General tasks
 
-- Install StopWatch class as a static library on the os
+- ~~Install StopWatch class as a static library on the os~~
 
 ## Camera node
 
