@@ -21,6 +21,11 @@ function source_turtlebot3_env(){
   source ~/ros_ws/turtlebot3_ws/install/setup.bash
 }
 
+source_mentee_project_env(){
+  source_ros_humble
+  source ~/ros_ws/mentee_project_ws/install/setup.bash
+}
+
 function ros2_build(){
   colcon build --symlink-install 
   source install/setup.bash
@@ -33,4 +38,4 @@ function ros2_clean(){
 ###########################################################
 ###################### script to run ######################
 ###########################################################
-source_ros_humble
+source_mentee_project_env
