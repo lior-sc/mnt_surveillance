@@ -17,31 +17,31 @@ void Camera::publish()
 {
   capture();
   img_pub_->publish(*msg_.get());
-  // RCLCPP_INFO(nh_->get_logger(), "Image published");
 }
 
 cv::Mat Camera::process_image(cv::Mat img)
 {
-  // Crop image into a square shape
-  int center_x = img.cols / 2;
-  int center_y = img.rows / 2;
-  int crop_size = std::min(img.rows, img.cols);
+    // Crop image into a square shape
+    int center_x = img.cols / 2;
+    int center_y = img.rows / 2;
+    int crop_size = std::min(img.rows, img.cols);
 
-  int x = center_x - crop_size / 2;
-  int y = center_y - crop_size / 2;
+    int x = center_x - crop_size / 2;
+    int y = center_y - crop_size / 2;
 
-  cv::Rect rect(x, y, crop_size, crop_size);
-  cv::Mat cropped_img = img(rect);
+    cv::Rect rect(x, y, crop_size, crop_size);
+    cv::Mat cropped_img = img(rect);
 
-  // convert the image to grayscale and 16 bit depth
-  cv::Mat gray_16bit_img;
-  cv::cvtColor(cropped_img, gray_16bit_img, cv::COLOR_RGB2GRAY);
-  // cropped_img.convertTo(grayscale_16bit_img, CV_16U, 1023.0 / 255.0);
+    // resize image
+    cv::Mat resized_img;
+    cv::Size resized_img_size(100, 100);
+    cv::resize(cropped_img, resized_img, resized_img_size);
 
-  // resize the image to a 9 by 9 pixel matrix
-  cv::Mat output_img;
-  cv::Size output_img_size(9, 9);
-  cv::resize(gray_16bit_img, output_img, output_img_size);
+    // convert the image to grayscale and 16 bit depth
+    cv::Mat gray_16bit_img;
+    cv::Mat gray_img;
+    cv::cvtColor(resized_img, gray_img, cv::COLOR_BGR2GRAY);
+    gray_img.convertTo(gray_16bit_img, CV_16U, 1023.0 / 255.0);
 
-  return output_img;
+    return gray_16bit_img;
 }
