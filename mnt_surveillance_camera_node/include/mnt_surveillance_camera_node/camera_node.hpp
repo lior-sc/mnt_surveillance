@@ -13,7 +13,7 @@ namespace mnt_surveillance
         class CameraNode : public rclcpp::Node
         {
         public:
-            CameraNode();
+            CameraNode(const std::string &camera_node_name);
 
         private:
             void declare_parameters();
