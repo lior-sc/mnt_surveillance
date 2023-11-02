@@ -2,7 +2,7 @@
 
 using mnt_surveillance::camera_node::CameraNode;
 
-CameraNode::CameraNode() : Node("camera_node")
+CameraNode::CameraNode(const std::string &camera_node_name) : Node(camera_node_name)
 {
     RCLCPP_INFO(this->get_logger(), "Init surveillance camera node");
     // get current node handle
