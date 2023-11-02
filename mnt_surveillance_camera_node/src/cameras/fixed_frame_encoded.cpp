@@ -12,6 +12,7 @@ FixedFrameEncoded::FixedFrameEncoded(
     // create base fixed frame
     this->open();
 
+    return;
 }
 
 cv::Mat FixedFrameEncoded::capture()
@@ -21,8 +22,9 @@ cv::Mat FixedFrameEncoded::capture()
 
 bool FixedFrameEncoded::open()
 {
+     RCLCPP_INFO(nh_->get_logger(), "Opening fixed frame with dimensions: %dx%d", frame_width_px_, frame_height_px_);
+    
     cv::Mat frame(frame_height_px_, frame_width_px_, CV_16UC1);
-    RCLCPP_INFO(nh_->get_logger(), "Opening fixed frame with dimensions: %dx%d", frame_width_px_, frame_height_px_);
     for (int i = 0; i < frame.rows; i++) {
         for (int j = 0; j < frame.cols; j++) {
             if ((i + j) % 2 == 0) {
@@ -32,17 +34,6 @@ bool FixedFrameEncoded::open()
             }
         }
     }
-
-    // Print the frame data
-    std::stringstream ss;
-    ss << "Frame data:" << std::endl;
-    for (int i = 0; i < frame.rows; i++) {
-        for (int j = 0; j < frame.cols; j++) {
-            ss << frame.at<uint16_t>(i, j) << " ";
-        }
-        ss << std::endl;
-    }
-    RCLCPP_INFO(nh_->get_logger(), "%s", ss.str().c_str());
 
     frame_ = frame;
     

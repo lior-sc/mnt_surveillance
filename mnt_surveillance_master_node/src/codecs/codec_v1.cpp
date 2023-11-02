@@ -33,6 +33,7 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
     */
     std::vector<uint8_t>::iterator it = encoded_data.begin();
     std::vector<uint16_t> decoded_data;
+
     uint16_t decoded_pixel = 0;
     uint8_t encoded_byte = 0;
     int bit_counter = 0;
@@ -44,48 +45,55 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
         {
             decoded_pixel = decoded_pixel | ((encoded_byte >> (8-i)) & 0x03);
             bit_counter += 2;
-            if(bit_counter == 10)
+            if(bit_counter >= 10)
             {
                 // move data to msb;
                 decoded_data.push_back(decoded_pixel << 6);
-                it++;
-                encoded_byte = *it;
                 decoded_pixel = 0;
                 bit_counter = 0;
-
+            }
+            else
+            {
+                decoded_pixel = decoded_pixel << 2;
             }
         }
+        it++;
     }
     return decoded_data;
 }
 
-std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> decoded_data)
+std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> raw_data)
 {
     /**
      * I know this is not the most efficient way but lets go with it for now
     */
-    std::vector<uint16_t>::iterator it = decoded_data.begin();
+    std::vector<uint16_t>::iterator it = raw_data.begin();
     std::vector<uint8_t> encoded_data;
-    uint16_t decoded_pixel = 0;
+    uint16_t raw_pixel = 0;
     uint8_t encoded_byte = 0;
     int bit_counter = 0;
 
-    while(it != decoded_data.end())
+    while(it != raw_data.end())
     {
-        decoded_pixel = *it >> 6;
+        raw_pixel = *it >> 6;
+
         for (int i=2;i<=10;i+=2)
         {
-            encoded_byte = decoded_pixel | ((decoded_pixel >> (10-i)) & 0x03);
+            encoded_byte = encoded_byte | ((raw_pixel >> (10-i)) & 0x03);
             bit_counter += 2;
             if(bit_counter >= 8)
             {
                 encoded_data.push_back(encoded_byte);
-                it++;
-                decoded_pixel = *it >> 6;
                 encoded_byte = 0;
                 bit_counter = 0;
             }
+            else
+            {
+                encoded_byte = encoded_byte << 2;
+            }
         }
+
+        it++;
     }
     return encoded_data;
 }
@@ -117,7 +125,7 @@ sensor_msgs::msg::Image CodecV1::uint16_vector_to_ros_image(std::vector<uint16_t
     msg.height = frame_height_px_;
     msg.width = frame_width_px_;
     msg.encoding = "mono16";
-    msg.is_bigendian = true;
+    msg.is_bigendian = false;
     msg.step = frame_width_px_ * sizeof(uint16_t);
     msg.data.resize(msg.step * msg.height);
     
@@ -140,4 +148,18 @@ sensor_msgs::msg::Image CodecV1::decode_to_ros_image(std::vector<uint8_t> input_
     sensor_msgs::msg::Image ros_image = uint16_vector_to_ros_image(decoded_data);
     
     return ros_image;
+}
+
+std::vector<uint16_t> CodecV1::get_pixel_vector(cv::Mat input_frame)
+{
+    std::vector<uint16_t> pixel_vector;
+    
+    for(int i=0; i<input_frame.rows; i++)
+    {
+        for(int j=0;j<input_frame.cols;j++)
+        {
+            pixel_vector.push_back(input_frame.at<uint16_t>(i,j));
+        }
+    }
+    return pixel_vector;
 }

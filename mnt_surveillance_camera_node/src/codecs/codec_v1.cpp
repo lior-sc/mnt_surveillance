@@ -33,6 +33,7 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
     */
     std::vector<uint8_t>::iterator it = encoded_data.begin();
     std::vector<uint16_t> decoded_data;
+
     uint16_t decoded_pixel = 0;
     uint8_t encoded_byte = 0;
     int bit_counter = 0;
@@ -44,12 +45,16 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
         {
             decoded_pixel = decoded_pixel | ((encoded_byte >> (8-i)) & 0x03);
             bit_counter += 2;
-            if(bit_counter == 10)
+            if(bit_counter >= 10)
             {
                 // move data to msb;
                 decoded_data.push_back(decoded_pixel << 6);
                 decoded_pixel = 0;
                 bit_counter = 0;
+            }
+            else
+            {
+                decoded_pixel = decoded_pixel << 2;
             }
         }
         it++;
