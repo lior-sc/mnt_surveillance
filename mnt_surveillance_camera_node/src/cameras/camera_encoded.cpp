@@ -9,17 +9,12 @@ CameraEncoded::CameraEncoded(std::shared_ptr<rclcpp::Node> &nh,
 {
   RCLCPP_INFO(nh_->get_logger(), "Init CameraEncoded object");
 
-  // declare parameters
-  nh_->declare_parameter<int>("frame_width_px");
-  nh_->declare_parameter<int>("frame_height_px");
-
   // get parameters
-  int frame_width_px;
-  int frame_height_px;
-  nh_->get_parameter("frame_width_px", frame_width_px); // fixed line
-  nh_->get_parameter("frame_height_px", frame_height_px); // fixed line
 
-  codec_ = std::make_shared<CodecV1>(frame_width_px, frame_height_px);
+  nh_->get_parameter("frame_width_px", frame_width_px_); // fixed line
+  nh_->get_parameter("frame_height_px", frame_height_px_); // fixed line
+
+  codec_ = std::make_shared<CodecV1>(frame_width_px_, frame_height_px_);
 
   // create publishers
   img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name, qos_);
@@ -32,8 +27,9 @@ CameraEncoded::CameraEncoded(std::shared_ptr<rclcpp::Node> &nh,
 void CameraEncoded::publish_capture()
 {
   frame_ = capture();
-  auto img_msg = cv_bridge::CvImage(std_msgs::msg::Header(), "mono16", frame_).toImageMsg();
-  img_pub_->publish(*img_msg.get());
+  cv::Mat processed_frame = process_image(frame_);
+  img_msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "mono16", processed_frame).toImageMsg();
+  img_pub_->publish(*img_msg_.get());
 }
 
 void CameraEncoded::publish_decoded_image()
@@ -45,6 +41,7 @@ void CameraEncoded::publish_decoded_image()
   
   std_msgs::msg::UInt8MultiArray encoded_data_msg_ = codec_->uint8_vector_to_msg(encoded_data);
   sensor_msgs::msg::Image decoded_img_msg = codec_->decode_to_ros_image(encoded_data_msg_.data);
+
   decoded_img_pub_->publish(decoded_img_msg);
 }
 
@@ -55,10 +52,15 @@ void CameraEncoded::publish_encoded_data()
 
   codec_->set_frame_size_px(processed_frame.cols / sizeof(uint16_t), processed_frame.rows);
   std::vector<uint8_t> encoded_data = codec_->encode_data(codec_->get_pixel_vector(processed_frame));
+
+  RCLCPP_INFO(nh_->get_logger(), "encoded data first bytes: %d, %d, %d, %d", encoded_data[0], encoded_data[1], encoded_data[2], encoded_data[3]);
   
-  std_msgs::msg::UInt8MultiArray encoded_data_msg_ = codec_->uint8_vector_to_msg(encoded_data);
-  encoded_data_pub_->publish(encoded_data_msg_);
+
+  std_msgs::msg::UInt8MultiArray encoded_data_msg;
+  encoded_data_msg.data = encoded_data;
+  return;
 }
+
 
 cv::Mat CameraEncoded::process_image(cv::Mat img)
 {
@@ -75,14 +77,22 @@ cv::Mat CameraEncoded::process_image(cv::Mat img)
 
     // resize image
     cv::Mat resized_img;
-    cv::Size resized_img_size(100, 100);
+    cv::Size resized_img_size(frame_height_px_, frame_width_px_);
     cv::resize(cropped_img, resized_img, resized_img_size);
 
     // convert the image to grayscale and 16 bit depth
-    cv::Mat gray_16bit_img;
     cv::Mat gray_img;
-    cv::cvtColor(resized_img, gray_img, cv::COLOR_BGR2GRAY);
-    gray_img.convertTo(gray_16bit_img, CV_16U, 1023.0 / 255.0);
+    cv::Mat gray_16bit_img;
 
-    return gray_16bit_img;
+    // convert to grayscale if the image is not grayscale
+    if(img.channels() != 1){
+      cv::cvtColor(resized_img, resized_img, cv::COLOR_BGR2GRAY);
+    }
+
+    if(img.type() != CV_16U)
+    {
+      resized_img.convertTo(resized_img,CV_16U);
+    }
+
+    return resized_img;
 }

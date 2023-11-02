@@ -44,6 +44,8 @@ namespace mnt_surveillance
 
                 // openCV variables
                 cv::Mat img_;
+                int frame_width_px_;
+                int frame_height_px_;
             };
 
         }

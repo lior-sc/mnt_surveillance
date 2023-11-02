@@ -11,6 +11,9 @@ Camera::Camera(std::shared_ptr<rclcpp::Node> &nh,
   RCLCPP_INFO(nh_->get_logger(), "Init Camera object");
 
   img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name_, 10);
+
+  nh_->get_parameter("frame_width_px", frame_width_px_); // fixed line
+  nh_->get_parameter("frame_height_px", frame_height_px_); // fixed line
 }
 
 void Camera::publish()
@@ -34,7 +37,7 @@ cv::Mat Camera::process_image(cv::Mat img)
 
     // resize image
     cv::Mat resized_img;
-    cv::Size resized_img_size(100, 100);
+    cv::Size resized_img_size(frame_height_px_, frame_width_px_);
     cv::resize(cropped_img, resized_img, resized_img_size);
 
     // convert the image to grayscale and 16 bit depth

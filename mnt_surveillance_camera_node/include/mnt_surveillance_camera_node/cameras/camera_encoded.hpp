@@ -49,10 +49,12 @@ namespace mnt_surveillance
 
                 // decoded img publisher variables
                 rclcpp::Publisher<sensor_msgs::msg::Image>::SharedPtr  decoded_img_pub_;
-                sensor_msgs::msg::Image::SharedPtr vdecoded_img_msg_;
+                sensor_msgs::msg::Image::SharedPtr decoded_img_msg_;
 
                 // openCV variables
                 cv::Mat frame_;
+                int frame_width_px_;
+                int frame_height_px_;
 
                 // codec variables
                 std::shared_ptr<CodecV1> codec_;
