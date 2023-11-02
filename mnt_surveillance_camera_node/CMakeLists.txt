@@ -33,11 +33,14 @@ include_directories(
 
 add_library(${PROJECT_NAME}_lib
   src/camera_node.cpp
+  src/codecs/codec_v1.cpp
   src/cameras/camera.cpp
   src/cameras/webcam.cpp
   src/cameras/random_noise.cpp
+  src/cameras/camera_encoded.cpp
+  src/cameras/webcam_encoded.cpp
+  src/cameras/fixed_frame_encoded.cpp
   src/misc/stopwatch.cpp
-  src/codecs/codec_v1.cpp
 )
 
 set(DEPENDENCIES
