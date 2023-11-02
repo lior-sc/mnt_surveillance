@@ -16,15 +16,10 @@ Webcam::Webcam(
 bool Webcam::capture()
 {
     cv::Mat frame;
-    {
-        StopWatch tmr(nh_);
-        cap->read(frame);
-    }
+    cap->read(frame);
 
     cv::Mat proc_frame = this->process_image(frame);
 
-    // msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", frame).toImageMsg();
-    // msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "bgr8", proc_frame).toImageMsg();
     msg_ = cv_bridge::CvImage(std_msgs::msg::Header(), "mono16", proc_frame).toImageMsg();
     return true;
 }
@@ -68,10 +63,6 @@ cv::Mat Webcam::process_image(cv::Mat img)
 
     cv::Rect rect(x, y, crop_size, crop_size);
     cv::Mat cropped_img = img(rect);
-
-    // // print img rectangle size
-    // std::string str = std::to_string(crop_size);
-    // RCLCPP_INFO(nh_->get_logger(), "%s", str.c_str());
 
     // resize image
     cv::Mat resized_img;
