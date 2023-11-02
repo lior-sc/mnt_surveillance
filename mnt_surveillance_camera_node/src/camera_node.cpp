@@ -53,7 +53,7 @@ void CameraNode::publish_video_streams()
     {
         camera->publish_capture();
         camera->publish_encoded_data();
-        camera->publish_decoded_image();
+        camera->encode_decode_publish_image();
     }
 }
 
