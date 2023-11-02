@@ -1,0 +1,6 @@
+master_node:
+  ros__parameters:
+
+    frame_width_px: 9
+    frame_height_px: 9
+    frame_rate_hz: 30

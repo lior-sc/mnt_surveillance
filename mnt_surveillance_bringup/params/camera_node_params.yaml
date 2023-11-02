@@ -1,0 +1,11 @@
+camera1_node:
+  ros__parameters:
+
+    frame_rate_ms: 32 # 30 fps
+
+    processed_frame:
+      width_px: 9
+      height_px: 9
+
+    webcam_port: 0
+
