@@ -2,8 +2,11 @@ camera1_node:
   ros__parameters:
 
     frame_rate_ms: 32 # 30 fps
-    frame_width_px: 9
-    frame_height_px: 9
+    frame_width_px: 100
+    frame_height_px: 100
 
     webcam_port: 0
+
+    camera_topic_name: "/video/raw_data"
+    camera_type: "webcam"
 

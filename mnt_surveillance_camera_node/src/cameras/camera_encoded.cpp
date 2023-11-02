@@ -17,9 +17,9 @@ CameraEncoded::CameraEncoded(std::shared_ptr<rclcpp::Node> &nh,
   codec_ = std::make_shared<CodecV1>(frame_width_px_, frame_height_px_);
 
   // create publishers
-  img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name, qos_);
-  encoded_data_pub_ = nh_->create_publisher<std_msgs::msg::UInt8MultiArray>(topic_name + "/encoded", qos_);
-  decoded_img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name + "/decoded", qos_);
+  img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name+"/img", qos_);
+  encoded_data_pub_ = nh_->create_publisher<std_msgs::msg::UInt8MultiArray>(topic_name+"raw_data", qos_);
+  decoded_img_pub_ = nh_->create_publisher<sensor_msgs::msg::Image>(topic_name + "/encoded_decoded_test", qos_);
   
 }
 
@@ -81,7 +81,6 @@ void CameraEncoded::publish_encoded_data()
   encoded_data_pub_->publish(encoded_data_msg);
   return;
 }
-
 
 cv::Mat CameraEncoded::process_image(cv::Mat img)
 {
