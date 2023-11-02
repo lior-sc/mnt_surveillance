@@ -121,7 +121,7 @@ std::vector<uint8_t> CodecV1::msg_to_uint8_vector(std_msgs::msg::UInt8MultiArray
 sensor_msgs::msg::Image CodecV1::uint16_vector_to_ros_image(std::vector<uint16_t> input_data)
 {
     sensor_msgs::msg::Image msg;
-    msg.header.stamp = rclcpp::Time();
+    // decoded_img_msg.header.stamp = nh_->now(); // need to complete in the publishing node
     msg.height = frame_height_px_;
     msg.width = frame_width_px_;
     msg.encoding = "mono16";
@@ -129,14 +129,12 @@ sensor_msgs::msg::Image CodecV1::uint16_vector_to_ros_image(std::vector<uint16_t
     msg.step = frame_width_px_ * sizeof(uint16_t);
     msg.data.resize(msg.step * msg.height);
     
-    int i = 0;
-    for(auto it = input_data.begin(); it != input_data.end(); it++)
+    for(size_t i=0; i<input_data.size(); i++)
     {
-        uint8_t lowByte = static_cast<uint8_t>(*it & 0x00FF);
-        uint8_t highByte = static_cast<uint8_t>((*it >> 8) & 0x00FF);
-        msg.data[i] = highByte;
-        msg.data[i+1] = lowByte;
-        i+=2;
+        uint8_t lowByte = static_cast<uint8_t>(input_data[i] & 0x00FF);
+        uint8_t highByte = static_cast<uint8_t>((input_data[i] >> 8) & 0x00FF);
+        msg.data[i*2] = highByte;
+        msg.data[i*2+1] = lowByte;
     }
     
     return msg;
@@ -145,9 +143,9 @@ sensor_msgs::msg::Image CodecV1::uint16_vector_to_ros_image(std::vector<uint16_t
 sensor_msgs::msg::Image CodecV1::decode_to_ros_image(std::vector<uint8_t> input_data)
 {
     std::vector<uint16_t> decoded_data = decode_data(input_data);
-    sensor_msgs::msg::Image ros_image = uint16_vector_to_ros_image(decoded_data);
+    sensor_msgs::msg::Image decoded_img_msg = uint16_vector_to_ros_image(decoded_data);
     
-    return ros_image;
+    return decoded_img_msg;
 }
 
 std::vector<uint16_t> CodecV1::get_pixel_vector(cv::Mat input_frame)
