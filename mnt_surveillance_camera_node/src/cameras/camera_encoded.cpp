@@ -32,7 +32,7 @@ void CameraEncoded::publish_capture()
   img_pub_->publish(*img_msg_.get());
 }
 
-void CameraEncoded::publish_decoded_image()
+void CameraEncoded::encode_decode_publish_image()
 {
   frame_ = capture();
   cv::Mat processed_frame = process_image(frame_);
@@ -42,7 +42,7 @@ void CameraEncoded::publish_decoded_image()
 
 
   sensor_msgs::msg::Image decoded_img_msg;
-  decoded_img_msg.header.stamp = nh_->now();
+  // decoded_img_msg.header.stamp = nh_->now();
   decoded_img_msg.height = frame_height_px_;
   decoded_img_msg.width = frame_width_px_; 
   decoded_img_msg.encoding = "mono16";

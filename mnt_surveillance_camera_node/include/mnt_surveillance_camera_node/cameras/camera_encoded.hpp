@@ -32,7 +32,7 @@ namespace mnt_surveillance
                 virtual cv::Mat process_image(cv::Mat);
                 virtual void publish_capture();
                 virtual void publish_encoded_data();
-                virtual void publish_decoded_image();
+                virtual void encode_decode_publish_image();
 
             protected:
                 void img_pub_callback();
