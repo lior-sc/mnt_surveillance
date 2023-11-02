@@ -48,13 +48,11 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
             {
                 // move data to msb;
                 decoded_data.push_back(decoded_pixel << 6);
-                it++;
-                encoded_byte = *it;
                 decoded_pixel = 0;
                 bit_counter = 0;
-
             }
         }
+        it++;
     }
     return decoded_data;
 }
@@ -69,7 +67,6 @@ std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> raw_data)
     uint16_t raw_pixel = 0;
     uint8_t encoded_byte = 0;
     int bit_counter = 0;
-    // int count = 0;
 
     while(it != raw_data.end())
     {
@@ -82,8 +79,6 @@ std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> raw_data)
             if(bit_counter >= 8)
             {
                 encoded_data.push_back(encoded_byte);
-                // it++;
-                // raw_pixel = *it >> 6;
                 encoded_byte = 0;
                 bit_counter = 0;
             }
@@ -92,7 +87,7 @@ std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> raw_data)
                 encoded_byte = encoded_byte << 2;
             }
         }
-        
+
         it++;
     }
     return encoded_data;
