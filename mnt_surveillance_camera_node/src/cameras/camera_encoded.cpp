@@ -53,11 +53,12 @@ void CameraEncoded::publish_encoded_data()
   codec_->set_frame_size_px(processed_frame.cols / sizeof(uint16_t), processed_frame.rows);
   std::vector<uint8_t> encoded_data = codec_->encode_data(codec_->get_pixel_vector(processed_frame));
 
-  RCLCPP_INFO(nh_->get_logger(), "encoded data first bytes: %d, %d, %d, %d", encoded_data[0], encoded_data[1], encoded_data[2], encoded_data[3]);
-  
+  // RCLCPP_INFO(nh_->get_logger(), "encoded data first bytes: %d, %d, %d, %d", encoded_data[0], encoded_data[1], encoded_data[2], encoded_data[3]);
 
   std_msgs::msg::UInt8MultiArray encoded_data_msg;
   encoded_data_msg.data = encoded_data;
+
+  encoded_data_pub_->publish(encoded_data_msg);
   return;
 }
 
