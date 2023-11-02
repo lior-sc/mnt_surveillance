@@ -38,11 +38,31 @@ void CameraEncoded::publish_decoded_image()
   cv::Mat processed_frame = process_image(frame_);
   std::vector<uint16_t> frame_data = codec_->get_pixel_vector(processed_frame);
   std::vector<uint8_t> encoded_data = codec_->encode_data(frame_data);
+  std::vector<uint16_t> decoded_data = codec_->decode_data(encoded_data);
+
+
+  sensor_msgs::msg::Image decoded_img_msg;
+  decoded_img_msg.header.stamp = nh_->now();
+  decoded_img_msg.height = frame_height_px_;
+  decoded_img_msg.width = frame_width_px_; 
+  decoded_img_msg.encoding = "mono16";
+  decoded_img_msg.is_bigendian = false;
+  decoded_img_msg.step = frame_width_px_ * sizeof(uint16_t);
+  decoded_img_msg.data.resize(decoded_img_msg.step * decoded_img_msg.height);
   
-  std_msgs::msg::UInt8MultiArray encoded_data_msg_ = codec_->uint8_vector_to_msg(encoded_data);
-  sensor_msgs::msg::Image decoded_img_msg = codec_->decode_to_ros_image(encoded_data_msg_.data);
+  for(size_t i=0; i<decoded_data.size(); i++)
+  {
+    uint8_t lowByte = static_cast<uint8_t>(decoded_data[i] & 0x00FF);
+    uint8_t highByte = static_cast<uint8_t>((decoded_data[i] >> 8) & 0x00FF);
+    decoded_img_msg.data[i*2] = highByte;
+    decoded_img_msg.data[i*2+1] = lowByte;
+  }
+  
+  // sensor_msgs::msg::Image decoded_img_msg = codec_->decode_to_ros_image(encoded_data_msg_.data);
 
   decoded_img_pub_->publish(decoded_img_msg);
+
+  return;
 }
 
 void CameraEncoded::publish_encoded_data()
@@ -87,13 +107,16 @@ cv::Mat CameraEncoded::process_image(cv::Mat img)
 
     // convert to grayscale if the image is not grayscale
     if(img.channels() != 1){
-      cv::cvtColor(resized_img, resized_img, cv::COLOR_BGR2GRAY);
+
     }
 
     if(img.type() != CV_16U)
     {
-      resized_img.convertTo(resized_img,CV_16U);
+      // resized_img.convertTo(resized_img,CV_16U,1023.0/255.0);
     }
+
+    cv::cvtColor(resized_img, resized_img, cv::COLOR_BGR2GRAY);
+    resized_img.convertTo(resized_img,CV_16U,1023.0/255.0);
 
     return resized_img;
 }
