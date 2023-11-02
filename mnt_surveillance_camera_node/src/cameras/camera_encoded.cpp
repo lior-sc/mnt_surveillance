@@ -116,7 +116,7 @@ cv::Mat CameraEncoded::process_image(cv::Mat img)
     }
 
     cv::cvtColor(resized_img, resized_img, cv::COLOR_BGR2GRAY);
-    resized_img.convertTo(resized_img,CV_16U,1023.0/255.0);
+    resized_img.convertTo(resized_img,CV_16U);
 
     return resized_img;
 }

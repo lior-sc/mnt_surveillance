@@ -15,8 +15,8 @@ CameraNode::CameraNode() : Node("camera_node")
 void CameraNode::declare_parameters()
 {
     // change this to accept from yaml configuration file
-    node_handle_->declare_parameter<int>("frame_width_px", 100);
-    node_handle_->declare_parameter<int>("frame_height_px", 100);
+    node_handle_->declare_parameter<int>("frame_width_px", 10);
+    node_handle_->declare_parameter<int>("frame_height_px", 10);
     node_handle_->declare_parameter<int>("frame_rate", 30);
 }
 
@@ -25,12 +25,12 @@ void CameraNode::add_cameras()
     cameras_.push_back(new camera::RandomNoise(
         node_handle_,
         "camera/random_noise"));
-    // encoded_cameras_.push_back(new camera::WebcamEncoded(
-    //     node_handle_,
-    //     "webcam_encoded"));
-    // encoded_cameras_.push_back(new camera::FixedFrameEncoded(
-    //     node_handle_,
-    //     "fixed_frame_encoded"));
+    encoded_cameras_.push_back(new camera::WebcamEncoded(
+        node_handle_,
+        "webcam_encoded"));
+    encoded_cameras_.push_back(new camera::FixedFrameEncoded(
+        node_handle_,
+        "fixed_frame_encoded"));
 }
 
 void CameraNode::run()
@@ -42,6 +42,8 @@ void CameraNode::run()
 
 void CameraNode::publish_video_streams()
 {
+    // RCLCPP_INFO(this->get_logger(), "Publishing video streams");
+
     for (const auto &camera : cameras_)
     {
         camera->publish();
