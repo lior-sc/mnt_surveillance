@@ -48,7 +48,7 @@ std::vector<uint16_t> CodecV1::decode_data(std::vector<uint8_t> encoded_data)
             if(bit_counter >= 10)
             {
                 // move data to msb;
-                decoded_data.push_back(decoded_pixel << 6);
+                decoded_data.push_back(decoded_pixel);
                 decoded_pixel = 0;
                 bit_counter = 0;
             }
@@ -75,7 +75,7 @@ std::vector<uint8_t> CodecV1::encode_data(std::vector<uint16_t> raw_data)
 
     while(it != raw_data.end())
     {
-        raw_pixel = *it >> 6;
+        raw_pixel = *it;
 
         for (int i=2;i<=10;i+=2)
         {
