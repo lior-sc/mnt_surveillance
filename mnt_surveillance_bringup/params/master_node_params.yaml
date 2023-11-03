@@ -9,3 +9,11 @@ master_node:
     decoded_video_topic_name: "/video/decoded_data"
     alarm_service_name: "/mnt_alarm_service"
     analyzer_video_topic_name: "/video/decoded_data"
+
+    alarm_over_saturation_flag: true
+    alarm_over_saturation_threshold: 0.2
+    alarm_over_saturation_ratio_threshold: 1022 # unsigned 10 bits pixel value
+
+    alarm_under_saturation_flag: true
+    alarm_under_saturation_threshold: 0.2 # ratio of pixels with saturation < threshold
+    alarm_under_saturation_ratio_threshold: 100 # unsigned 10 bits pixel value

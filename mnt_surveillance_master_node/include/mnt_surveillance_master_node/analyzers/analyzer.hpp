@@ -50,6 +50,7 @@ namespace mnt_surveillance
                 void check_alarm_conditions();
 
             protected:
+                virtual void get_parameters();
                 virtual void img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg);
                 virtual void create_img_subscriber(const std::string &topic_name);
                 virtual void create_alarm_service_client(const std::string &service_name);
@@ -68,6 +69,14 @@ namespace mnt_surveillance
                 // service variables
                 rclcpp::Client<std_srvs::srv::Trigger>::SharedPtr alarm_client_;
                 std_srvs::srv::Trigger::Request::SharedPtr alarm_request_;
+
+                // alarm variables
+                bool alarm_over_saturation_flag_;
+                bool alarm_under_saturation_flag_;
+                int saturation_thresh_;
+                int undersaturation_thresh_;
+                double saturation_ratio_thresh_;
+                double undersaturation_ratio_thresh_;
             };
 
         }

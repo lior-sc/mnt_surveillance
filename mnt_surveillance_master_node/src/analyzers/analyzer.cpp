@@ -8,10 +8,23 @@ Analyzer::Analyzer(std::shared_ptr<rclcpp::Node> &nh,
                    const std::string &alarm_service_name)
     : nh_(nh)
 {
-    // img_subscription_ = nh_->create_subscription<sensor_msgs::msg::Image>(
-    //     topic_name, qos_, std::bind(&Analyzer::img_sub_callback, this, _1));
+    RCLCPP_INFO(nh_->get_logger(), "Init analyzer object");
+    
+    get_parameters();
     create_img_subscriber(img_topic_name);
     create_alarm_service_client(alarm_service_name);
+}
+
+void Analyzer::get_parameters()
+{
+    // get and store paremeters from yaml file
+    nh_->get_parameter_or("alarm_over_saturation_flag",alarm_over_saturation_flag_, true);
+    nh_->get_parameter_or("alarm_over_saturation_thresold",saturation_thresh_, 1022);
+    nh_->get_parameter_or("alarm_over_saturation_ratio_thresold",saturation_ratio_thresh_, 0.20);
+    
+    nh_->get_parameter_or("alarm_under_saturation_flag",alarm_under_saturation_flag_, true);
+    nh_->get_parameter_or("alarm_under_saturation_thresold",undersaturation_thresh_, 100);
+    nh_->get_parameter_or("alarm_under_saturation_ratio_thresold",undersaturation_ratio_thresh_, 0.81);
 }
 
 void Analyzer::create_img_subscriber(const std::string &topic_name)
@@ -24,6 +37,7 @@ void Analyzer::img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg)
 {
     // get image
     cv_bridge::CvImagePtr cv_ptr;
+    
     try
     {
         cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::MONO16);
@@ -73,24 +87,30 @@ void Analyzer::check_alarm_conditions()
     /**
      * if saturated pixels above 20% that means someone is blinding the camera
      */
-    double saturation_thresh = 0.2;
-    double saturation_ratio = get_saturated_pixels_ratio(frame_, 1022, 1023);
 
-    if (saturation_ratio > saturation_thresh)
+    if(alarm_over_saturation_flag_ == true)
     {
-        alarm_client_->async_send_request(alarm_request_);
+        double saturation_ratio = get_saturated_pixels_ratio(frame_, saturation_thresh_, 1023);
+        // RCLCPP_INFO(nh_->get_logger(), "Saturation ratio: %f", saturation_ratio);
+
+        if (saturation_ratio > saturation_ratio_thresh_)
+        {
+            alarm_client_->async_send_request(alarm_request_);
+        }
     }
 
-    double darkness_thresh = 0.81;
-    double darkness_ratio = get_dark_pixels_ratio(frame_, 100, 1023);
-
-    /**
-     * if more than 80% of the camera is dark than someone has covered the camera
-     */
-    if (darkness_ratio > darkness_thresh)
+    if(alarm_under_saturation_flag_ == true)
     {
-        alarm_client_->async_send_request(alarm_request_);
+        double undersaturation_ratio = get_dark_pixels_ratio(frame_, undersaturation_thresh_, 100);
+        // RCLCPP_INFO(nh_->get_logger(), "Undersaturation ratio: %f", undersaturation_ratio);
+
+        if (undersaturation_ratio > undersaturation_ratio_thresh_)
+        {
+            alarm_client_->async_send_request(alarm_request_);
+        }
     }
+
+    return;
 }
 
 void Analyzer::create_alarm_service_client(const std::string &service_name)

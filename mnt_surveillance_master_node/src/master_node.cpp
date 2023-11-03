@@ -27,13 +27,23 @@ MasterNode::MasterNode() : Node("master_node")
 
 void MasterNode::declare_parameters()
 {
-    // declare parameters present in yaml file
-    node_handle_->declare_parameter("frame_width_px", 9);
-    node_handle_->declare_parameter("frame_height_px", 9);
-    node_handle_->declare_parameter("encoded_video_topic_name", "/video/raw_data");
-    node_handle_->declare_parameter("decoded_video_topic_name", "/video/decoded_data");
-    node_handle_->declare_parameter("alarm_service_name", "/mnt_alarm_service");
-    node_handle_->declare_parameter("analyzer_video_topic_name", "/video/decoded_data");
+    // declare all parameters present in yaml file
+    node_handle_->declare_parameter<int>("frame_width_px", 9);
+    node_handle_->declare_parameter<int>("frame_height_px", 9);
+
+    node_handle_->declare_parameter<std::string>("encoded_video_topic_name", "/video/raw_data");
+    node_handle_->declare_parameter<std::string>("decoded_video_topic_name", "/video/decoded_data");
+    node_handle_->declare_parameter<std::string>("alarm_service_name", "/mnt_alarm_service");
+    node_handle_->declare_parameter<std::string>("analyzer_video_topic_name", "/video/decoded_data");
+
+    node_handle_->declare_parameter<bool>("alarm_over_saturation_flag",true);
+    node_handle_->declare_parameter<double>("alarm_over_saturation_thresold",0.20);
+    node_handle_->declare_parameter<int>("alarm_over_saturation_ratio_thresold",1022);
+
+    node_handle_->declare_parameter<bool>("alarm_under_saturation_flag",true);
+    node_handle_->declare_parameter<double>("alarm_under_saturation_thresold",0.81);
+    node_handle_->declare_parameter<int>("alarm_under_saturation_ratio_thresold",100);
+
 }
 
 void MasterNode::add_analyzers(const std::string &img_topic_name,
