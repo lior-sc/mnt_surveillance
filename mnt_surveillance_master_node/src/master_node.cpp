@@ -39,12 +39,15 @@ void MasterNode::declare_parameters()
     node_handle_->declare_parameter<std::string>("analyzer_video_topic_name", "/video/decoded_data");
 
     node_handle_->declare_parameter<bool>("alarm_over_saturation_flag",true);
-    node_handle_->declare_parameter<int>("alarm_over_saturation_thresold",1022);
-    node_handle_->declare_parameter<double>("alarm_over_saturation_ratio_thresold",0.2);
+    node_handle_->declare_parameter<int>("alarm_over_saturation_threshold",30000);
+    node_handle_->declare_parameter<double>("alarm_over_saturation_ratio_threshold",0.2);
 
     node_handle_->declare_parameter<bool>("alarm_under_saturation_flag",true);
-    node_handle_->declare_parameter<int>("alarm_under_saturation_thresold",100);
-    node_handle_->declare_parameter<double>("alarm_under_saturation_ratio_thresold",0.81);
+    node_handle_->declare_parameter<int>("alarm_under_saturation_threshold",30000);
+    node_handle_->declare_parameter<double>("alarm_under_saturation_ratio_threshold",0.81);
+
+    node_handle_->declare_parameter<bool>("analyzer_print_results_flag",false);
+    
 
 }
 

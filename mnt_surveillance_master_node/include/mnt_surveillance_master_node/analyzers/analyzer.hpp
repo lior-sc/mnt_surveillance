@@ -54,8 +54,8 @@ namespace mnt_surveillance
                 virtual void img_sub_callback(const sensor_msgs::msg::Image::SharedPtr msg);
                 virtual void create_img_subscriber(const std::string &topic_name);
                 virtual void create_alarm_service_client(const std::string &service_name);
-                double get_saturated_pixels_ratio(cv::Mat frame, double threshold_value, double max_value);
-                double get_dark_pixels_ratio(cv::Mat frame, double threshold_value, double in_value);
+                double get_saturated_pixels_ratio(cv::Mat frame, double threshold_value, double max_pixel_value);
+                double get_dark_pixels_ratio(cv::Mat frame, double threshold_value, double max_pixel_value);
 
                 // ros variables
                 std::shared_ptr<rclcpp::Node> nh_;
@@ -73,6 +73,7 @@ namespace mnt_surveillance
                 // alarm variables
                 bool alarm_over_saturation_flag_;
                 bool alarm_under_saturation_flag_;
+                bool print_results_flag_;
                 int saturation_thresh_;
                 int undersaturation_thresh_;
                 double saturation_ratio_thresh_;

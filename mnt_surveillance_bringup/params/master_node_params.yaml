@@ -10,10 +10,12 @@ master_node:
     alarm_service_name: "/mnt_alarm_service"
     analyzer_video_topic_name: "/video/decoded_data"
 
-    alarm_over_saturation_flag: false
-    alarm_over_saturation_threshold: 1022
+    alarm_over_saturation_flag: true
+    alarm_over_saturation_threshold: 50000
     alarm_over_saturation_ratio_threshold: 0.2 # unsigned 10 bits pixel value
 
-    alarm_under_saturation_flag: false
-    alarm_under_saturation_threshold: 100 # ratio of pixels with saturation < threshold
+    alarm_under_saturation_flag: true
+    alarm_under_saturation_threshold: 10000 # ratio of pixels with saturation < threshold
     alarm_under_saturation_ratio_threshold: 0.8 # unsigned 10 bits pixel value
+
+    analyzer_print_results_flag: false  # print results in terminal for testing
