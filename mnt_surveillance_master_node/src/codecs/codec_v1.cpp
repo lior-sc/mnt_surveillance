@@ -1,6 +1,6 @@
-#include "mnt_surveillance_camera_node/codecs/codec_v1.hpp"
+#include "mnt_surveillance_master_node/codecs/codec_v1.hpp"
 
-using mnt_surveillance::camera_node::codec::CodecV1;
+using mnt_surveillance::master_node::codec::CodecV1;
 
 CodecV1::CodecV1(int frame_width_px, int frame_height_px)
     : frame_width_px_(frame_width_px),

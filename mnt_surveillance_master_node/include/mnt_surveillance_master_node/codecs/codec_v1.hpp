@@ -8,7 +8,7 @@
 
 namespace mnt_surveillance
 {
-    namespace camera_node
+    namespace master_node
     {
         namespace codec
         {
