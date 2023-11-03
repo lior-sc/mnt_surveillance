@@ -2,5 +2,10 @@ master_node:
   ros__parameters:
 
     frame_rate_ms: 32 # 30 fps
-    frame_width_px: 9
-    frame_height_px: 9
+    frame_width_px: 100
+    frame_height_px: 100
+
+    encoded_video_topic_name: "/video/raw_data"
+    decoded_video_topic_name: "/video/decoded_data"
+    alarm_service_name: "/mnt_alarm_service"
+    analyzer_video_topic_name: "/video/decoded_data"

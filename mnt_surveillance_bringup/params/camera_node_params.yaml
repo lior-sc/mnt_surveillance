@@ -8,5 +8,6 @@ camera1_node:
     webcam_port: 0
 
     camera_topic_name: "/video/raw_data"
-    camera_type: "webcam"
+    camera_type: "webcam"   # "webcam" or "video_file_read"
+    video_file_read_path: "/home/lior/mnt_surveillance/video_file.bin"
 
