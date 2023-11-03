@@ -15,11 +15,11 @@ from launch_ros.actions import Node
 def generate_launch_description():
 
     recorder_node_param_dir = LaunchConfiguration(
-        'camera_node_param_dir',
+        'recorder_node_param_dir',
         default=os.path.join(
             get_package_share_directory('mnt_surveillance_bringup'),
             'params',
-            'recorder_node_params' + '.yaml'))
+            'master_node_params' + '.yaml'))
 
     return LaunchDescription([
 

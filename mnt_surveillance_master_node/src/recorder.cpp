@@ -49,10 +49,9 @@ void RecorderNode::stop_recording()
 
 void RecorderNode::data_callback(const std_msgs::msg::UInt8MultiArray::SharedPtr msg)
 {
-    RCLCPP_INFO(this->get_logger(), "Data callback");
-
+    RCLCPP_INFO_THROTTLE(this->get_logger(), *this->get_clock(), 5000, "recording data");
     std::vector<uint8_t> data = msg->data;
-    append_data_to_file(data, "/home/lior/Desktop/test.txt");
+    append_data_to_file(data, file_path_.c_str());
 }
 
 bool RecorderNode::create_file_directory_path(const std::string &file_path)
@@ -61,16 +60,24 @@ bool RecorderNode::create_file_directory_path(const std::string &file_path)
 
     std::filesystem::path directory_path = std::filesystem::path(file_path).parent_path();
 
-    bool success;
+    RCLCPP_INFO(this->get_logger(), "directory path: %s", directory_path.c_str());
 
-    if (!std::filesystem::exists(directory_path))
+    bool success = true;
+
+    if (std::filesystem::exists(directory_path) == false)
     {
+        RCLCPP_WARN(this->get_logger(), "Directory path does not exist. Creating directory path");
+
         success = std::filesystem::create_directories(directory_path);
 
         if(!success)
             RCLCPP_ERROR(this->get_logger(), "Failed to create directory path");
         else
             RCLCPP_INFO(this->get_logger(), "Created directory path");
+    }
+    else
+    {
+        RCLCPP_INFO(this->get_logger(), "Directory path already exists");
     }
 
     return success;
@@ -88,7 +95,7 @@ bool RecorderNode::append_data_to_file(const std::vector<uint8_t> &data,
 
     file.write(reinterpret_cast<const char *>(data.data()), data.size());
 
-    if (file.good())
+    if (!file.good())
     {
         RCLCPP_ERROR(this->get_logger(), "Failed to write to file");
         return false;
@@ -103,7 +110,7 @@ void RecorderNode::declare_parameters()
 {
     // declare all parameters present in yaml file
     this->declare_parameter<std::string>("topic_name", "/video/raw_data");
-    this->declare_parameter<std::string>("file_path", "l/home/lior/Desktop/mnt_surveillance_data.bin");
+    this->declare_parameter<std::string>("file_path", "/home/lior/Desktop/mnt_surveillance_data.bin");
 }
 
 void RecorderNode::get_parameters()
