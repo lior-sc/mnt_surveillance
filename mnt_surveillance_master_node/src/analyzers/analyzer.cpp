@@ -3,8 +3,6 @@
 using mnt_surveillance::master_node::analyzer::Analyzer;
 using std::placeholders::_1;
 
-void print_pixel_values(cv::Mat frame);
-double get_oversaturated_pixels(cv::Mat frame, int thresold);
 
 Analyzer::Analyzer(std::shared_ptr<rclcpp::Node> &nh,
                    const std::string &img_topic_name,
@@ -86,6 +84,12 @@ double Analyzer::get_dark_pixels_ratio(cv::Mat frame, double threshold_value, do
     return dark_pixels_ratio;
 }
 
+void Analyzer::create_alarm_service_client(const std::string &service_name)
+{
+    alarm_client_ = nh_->create_client<std_srvs::srv::Trigger>(service_name);
+    alarm_request_ = std::make_shared<std_srvs::srv::Trigger::Request>();
+}
+
 void Analyzer::check_alarm_conditions()
 {
 
@@ -128,41 +132,3 @@ void Analyzer::check_alarm_conditions()
 
     return;
 }
-
-void Analyzer::create_alarm_service_client(const std::string &service_name)
-{
-    alarm_client_ = nh_->create_client<std_srvs::srv::Trigger>(service_name);
-    alarm_request_ = std::make_shared<std_srvs::srv::Trigger::Request>();
-}
-
-
-
-
-// void print_pixel_values(cv::Mat frame)
-// {
-//     for (int i = 0; i < frame.rows; i++) {
-//         for (int j = 0; j < frame.cols; j++) {
-//             std::cout << frame.at<uint16_t>(i, j) << " ";
-//         }
-//         std::cout << std::endl;
-//     }
-// }
-
-// double get_oversaturated_pixels(cv::Mat frame, int thresold)
-// {
-//     int total_pixels = static_cast<int>(frame.total());
-//     int oversaturated_pixels = 0;
-//     for (int i = 0; i < frame.rows; i++) {
-//         for (int j = 0; j < frame.cols; j++) {
-//             if (frame.at<uint16_t>(i, j) > static_cast<uint16_t>(thresold))
-//             {
-//                 oversaturated_pixels++;   
-//             }
-//         }
-//     }
-    
-//     double oversaturated_pixels_ratio = static_cast<double>(oversaturated_pixels) / static_cast<double>(total_pixels); // ranges from 0 to 1
-
-//     std::cout << "Oversaturated pixels: " << oversaturated_pixels << std::endl;
-//     return oversaturated_pixels_ratio;
-// }
