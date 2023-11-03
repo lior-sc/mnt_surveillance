@@ -37,7 +37,7 @@ namespace mnt_surveillance
                 rclcpp::Subscription<std_msgs::msg::UInt8MultiArray>::SharedPtr raw_data_subscriber_;
                 std_msgs::msg::UInt8MultiArray::SharedPtr raw_data_msg_;
 
-                std::shared_ptr<CodecV1> codec_;
+                std::shared_ptr<codec::CodecV1> codec_;
                 int frame_width_px_;
                 int frame_height_px_;
             };

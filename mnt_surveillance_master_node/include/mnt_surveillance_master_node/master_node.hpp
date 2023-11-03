@@ -10,10 +10,6 @@ namespace mnt_surveillance
 {
     namespace master_node
     {
-        using img_decoder::ImgDecoder;
-        using analyzer::Analyzer;
-        using alarm::Alarm;
-
         class MasterNode : public rclcpp::Node
         {
         public:
@@ -31,9 +27,9 @@ namespace mnt_surveillance
             rclcpp::Node::SharedPtr node_handle_;
             rclcpp::TimerBase::SharedPtr publish_timer_;
             
-            std::shared_ptr<Alarm> alarm_service_server_;
-            std::shared_ptr<Analyzer> analyzer_object_;
-            std::shared_ptr<ImgDecoder> img_decoder_object_;
+            std::shared_ptr<alarm::Alarm> alarm_service_server_;
+            std::shared_ptr<analyzer::Analyzer> analyzer_object_;
+            std::shared_ptr<img_decoder::ImgDecoder> img_decoder_object_;
 
             // Other member functions here
         };

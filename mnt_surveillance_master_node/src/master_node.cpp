@@ -1,6 +1,7 @@
 #include "mnt_surveillance_master_node/master_node.hpp"
 
 using mnt_surveillance::master_node::MasterNode;
+using mnt_surveillance::master_node::img_decoder::ImgDecoder;
 
 MasterNode::MasterNode() : Node("master_node")
 {
@@ -63,7 +64,19 @@ void MasterNode::add_recorders()
 */
 void MasterNode::add_video_decoder()
 {
-    img_decoder_object_ = std::make_shared<ImgDecoder>(node_handle_);
+    std::string encoded_video_topic_name;
+    std::string decoded_video_topic_name;
+
+    node_handle_->get_parameter_or("encoded_video_topic_name",
+                                    encoded_video_topic_name,
+                                    std::string("/video/raw_data"));
+
+    node_handle_->get_parameter_or("decoded_video_topic_name",
+                                    decoded_video_topic_name,
+                                    std::string("/video/decoded_data"));    
+    img_decoder_object_ = std::make_shared<ImgDecoder>(node_handle_,
+                                                        encoded_video_topic_name,
+                                                        decoded_video_topic_name);
 }
 void MasterNode::add_alarms(const std::string &alarm_service_name)
 {

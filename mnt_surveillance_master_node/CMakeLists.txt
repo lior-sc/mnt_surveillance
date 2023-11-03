@@ -37,6 +37,8 @@ add_library(${PROJECT_NAME}_lib
   src/alarm.cpp
   src/recorder.cpp
   src/analyzers/analyzer.cpp
+  src/img_decoder.cpp
+  src/codecs/codec_v1.cpp
 )
 
 set(DEPENDENCIES

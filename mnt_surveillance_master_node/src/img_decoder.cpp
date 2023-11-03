@@ -10,9 +10,8 @@ ImgDecoder::ImgDecoder( std::shared_ptr<rclcpp::Node> &nh,
                         std::string decoded_video_topic) :
     nh_(nh)
 {
-    std::string encoded_video_topic;
-    std::string decoded_video_topic;
-    
+    RCLCPP_INFO(nh_->get_logger(), "Init image decoder object");
+
     //global parameters
     nh_->get_parameter_or("frame_width_px", 
                         frame_width_px_, 
