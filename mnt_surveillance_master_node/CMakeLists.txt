@@ -39,6 +39,7 @@ add_library(${PROJECT_NAME}_lib
   src/analyzers/analyzer.cpp
   src/img_decoder.cpp
   src/codecs/codec_v1.cpp
+  src/recorder.cpp
 )
 
 set(DEPENDENCIES
@@ -55,10 +56,15 @@ target_link_libraries(${PROJECT_NAME}_lib)                      # link libraries
 ament_target_dependencies(${PROJECT_NAME}_lib ${DEPENDENCIES})  # link ros libraries to target
 
 # create executable and link libraries and ament packages
-set(EXECUTABLE_NAME master_node)
-add_executable(${EXECUTABLE_NAME} src/node_main.cpp)
-target_link_libraries(${EXECUTABLE_NAME} ${PROJECT_NAME}_lib)
-ament_target_dependencies(${EXECUTABLE_NAME} ${DEPENDENCIES})
+set(MASTER_EXECUTABLE_NAME master_node)
+add_executable(${MASTER_EXECUTABLE_NAME} src/node_main.cpp)
+target_link_libraries(${MASTER_EXECUTABLE_NAME} ${PROJECT_NAME}_lib)
+ament_target_dependencies(${MASTER_EXECUTABLE_NAME} ${DEPENDENCIES})
+
+set(RECORDER_EXECUTABLE_NAME recorder_node)
+add_executable(${RECORDER_EXECUTABLE_NAME} src/recorder_main.cpp)
+target_link_libraries(${RECORDER_EXECUTABLE_NAME} ${PROJECT_NAME}_lib)
+ament_target_dependencies(${RECORDER_EXECUTABLE_NAME} ${DEPENDENCIES})
 
 ################################################################################
 # Install
@@ -67,7 +73,11 @@ ament_target_dependencies(${EXECUTABLE_NAME} ${DEPENDENCIES})
 #   DESTINATION share/${PROJECT_NAME}
 # )
 
-install(TARGETS ${EXECUTABLE_NAME}
+install(TARGETS ${MASTER_EXECUTABLE_NAME}
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+install(TARGETS ${RECORDER_EXECUTABLE_NAME}
   DESTINATION lib/${PROJECT_NAME}
 )
 

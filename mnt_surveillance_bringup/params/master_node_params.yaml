@@ -19,3 +19,12 @@ master_node:
     alarm_under_saturation_ratio_threshold: 0.8 # unsigned 10 bits pixel value
 
     analyzer_print_results_flag: false  # print results in terminal for testing
+
+    recorder_save_video_flag: false
+    recorder_save_video_path: "/home/roboticslab/Videos/"
+
+recorder_node:
+  ros__parameters:
+
+    topic_name: "/video/decoded_data"
+    file_path: "/home/lior/Desktop/test.bin"
