@@ -17,7 +17,7 @@ def generate_launch_description():
         'master_node_param_dir',
         default=os.path.join(
             get_package_share_directory('mnt_surveillance_bringup'),
-            'param',
+            'params',
             'master_node_params' + '.yaml'))
 
     return LaunchDescription([

@@ -54,9 +54,9 @@ void CameraNode::publish_video_streams()
     
     for (const auto &camera : encoded_cameras_)
     {
-        camera->publish_capture(); // for testing
+        // camera->publish_capture(); // for testing
         camera->publish_encoded_data();
-        camera->encode_decode_publish_image(); // for testing
+        // camera->encode_decode_publish_image(); // for testing
     }
 }
 

@@ -19,10 +19,11 @@ MasterNode::MasterNode() : Node("master_node")
                                     alarm_service_name,
                                     std::string("/mnt_alarm_service"));   
 
-    add_video_decoder();
+    
     add_alarms(alarm_service_name);
     add_analyzers(analyzer_video_topic_name,
                   alarm_service_name);
+    add_video_decoder();
     run();
 }
 
@@ -38,12 +39,12 @@ void MasterNode::declare_parameters()
     node_handle_->declare_parameter<std::string>("analyzer_video_topic_name", "/video/decoded_data");
 
     node_handle_->declare_parameter<bool>("alarm_over_saturation_flag",true);
-    node_handle_->declare_parameter<double>("alarm_over_saturation_thresold",0.20);
-    node_handle_->declare_parameter<int>("alarm_over_saturation_ratio_thresold",1022);
+    node_handle_->declare_parameter<int>("alarm_over_saturation_thresold",1022);
+    node_handle_->declare_parameter<double>("alarm_over_saturation_ratio_thresold",0.2);
 
     node_handle_->declare_parameter<bool>("alarm_under_saturation_flag",true);
-    node_handle_->declare_parameter<double>("alarm_under_saturation_thresold",0.81);
-    node_handle_->declare_parameter<int>("alarm_under_saturation_ratio_thresold",100);
+    node_handle_->declare_parameter<int>("alarm_under_saturation_thresold",100);
+    node_handle_->declare_parameter<double>("alarm_under_saturation_ratio_thresold",0.81);
 
 }
 
@@ -64,8 +65,10 @@ void MasterNode::add_recorders()
 */
 void MasterNode::add_video_decoder()
 {
+    
     std::string encoded_video_topic_name;
     std::string decoded_video_topic_name;
+    
 
     node_handle_->get_parameter_or("encoded_video_topic_name",
                                     encoded_video_topic_name,
@@ -73,7 +76,8 @@ void MasterNode::add_video_decoder()
 
     node_handle_->get_parameter_or("decoded_video_topic_name",
                                     decoded_video_topic_name,
-                                    std::string("/video/decoded_data"));    
+                                    std::string("/video/decoded_data"));  
+    
     img_decoder_object_ = std::make_shared<ImgDecoder>(node_handle_,
                                                         encoded_video_topic_name,
                                                         decoded_video_topic_name);
