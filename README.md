@@ -1,6 +1,6 @@
 # mnt_surveillance
 
-## Project Conclutions
+## Project Conclusions
 During the execution of the task my main focus was to keep a maintainable, testable code and a readable code structure. I did so by conducting an object oriented programming approach which allowed my to segment and encapsulate various espects of the code. This allowed me to conduct testing and debugging to a certain part of the code without compromising other parts of the code. 
 
 Some of the objects present in the code were used for testing the encoding and decoding of the images from the regulat sensor_msgs::msg::Image msg type to my propryetary 10bit encoding and decoding codec.
